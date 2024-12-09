@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mewarnai</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+        h1 {
+            font-size: 3em;
+            color: #333;
+        }
+        input[type="text"] {
+            font-size: 1.5em;
+            padding: 10px;
+            width: 40%;
+            margin: 20px 0;
+        }
+        #color-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 80px); /* 4 columns with 80px each */
+            grid-template-rows: repeat(3, 80px);    /* 4 rows with 80px each */
+            gap: 2px;
+            margin: 20px 0;
+            margin-bottom: 30px;
+        }
+        .cell {
+            width: 90px;
+            height: 90px;
+            background-color: lightgray;
+            border: 1px solid #333;
+            cursor: pointer;
+        }
+        .color-options {
+            display: flex;
+            gap: 10px;
+        }
+        .color {
+            width: 60px;
+            height: 60px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .red { background-color: red; }
+        .yellow { background-color: yellow; }
+        .blue { background-color: blue; }
+    </style>
+</head>
+<body>
+    <h1 style="margin-top: -50px;">MEWARNAI KOTAK</h1>
+    <input type="text" placeholder="" id="nameInput">
+    
+    <div id="color-grid">
+        <!-- Generate 16 cells in a 4x4 grid -->
+        <div class="cell" onclick="paintCell(this)"></div>
+        <div class="cell" onclick="paintCell(this)"></div>
+        <div class="cell" onclick="paintCell(this)"></div>
+
+        <div class="cell" onclick="paintCell(this)"></div>
+        <div class="cell" onclick="paintCell(this)"></div>
+        <div class="cell" onclick="paintCell(this)"></div>
+
+        <div class="cell" onclick="paintCell(this)"></div>
+        <div class="cell" onclick="paintCell(this)"></div>
+        <div class="cell" onclick="paintCell(this)"></div>
+    </div>
+
+    <div class="color-options">
+        <div class="color red" onclick="selectColor('red')"></div>
+        <div class="color yellow" onclick="selectColor('yellow')"></div>
+        <div class="color blue" onclick="selectColor('blue')"></div>
+    </div>
+
+    <script>
+        let selectedColor = 'red'; // Default color
+
+        // Function to select color
+        function selectColor(color) {
+            selectedColor = color;
+        }
+
+        // Function to paint the cell with the selected color
+        function paintCell(cell) {
+            cell.style.backgroundColor = selectedColor;
+        }
+    </script>
+</body>
+</html>

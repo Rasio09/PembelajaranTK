@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PENGHUBUNG GAMBAR HEWAN</title>
+  <style>
+    body {
+      display: flex;
+      flex-direction: column; /* Konten mengalir dari atas ke bawah */
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background-color: #dfdfdf;
+      font-family: Arial, sans-serif;
+    }
+    h1 {
+      margin-bottom: 20px; /* Jarak antara judul dan konten */
+      color: #333; /* Warna teks */
+    }
+    .co {
+      margin-bottom: 20px;
+      font-size: larger;
+      color: #333;
+    }
+    .container {
+      display: flex;
+      justify-content: space-between;
+      width: 80%;
+      position: relative;
+    }
+    .circle {
+      width: 170px;
+      height: 120px;
+      border-radius: 20%;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+      background-size: cover;
+      background-position: center;
+      border: 2px solid #333;
+    }
+    .circle.active {
+      transform: scale(1.2);
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    }
+    .left, .right {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .line {
+      position: absolute;
+      height: 4px;
+      transform-origin: left center;
+      z-index: -1;
+      transition: width 0.1s ease;
+      background-color: #333;
+    }
+  </style>
+</head>
+<body>
+  <h1>MENGHUBUNGKAN GAMBAR DENGAN SUARA</h1> <!-- Judul ditambahkan di sini -->
+  <div class="co">NAMA : <input type="text" value="" style="height: 40px; font-size: larger;"></div>
+
+  <div class="container">
+    <div class="left">
+      <div class="circle" data-animal="ayam" data-position="left" style="background-image: url('images/ayam.png');"></div>
+      <div class="circle" data-animal="sapi" data-position="left" style="background-image: url('images/sapi.png');"></div>
+      <div class="circle" data-animal="kambing" data-position="left" style="background-image: url('images/kambing.png');"></div>
+    </div>
+    <div class="right">
+      <div class="circle" data-animal="kambing" data-position="right" style="background-image: url('images/kambing.png');"></div>
+      <div class="circle" data-animal="ayam" data-position="right" style="background-image: url('images/ayam.png');"></div>
+      <div class="circle" data-animal="sapi" data-position="right" style="background-image: url('images/sapi.png');"></div>
+    </div>
+  </div>
+
+  <!-- Preload audio files -->
+  <audio id="ayam-sound" src="sounds/ayam.ogg"></audio>
+  <audio id="sapi-sound" src="sounds/sapi.ogg"></audio>
+  <audio id="kambing-sound" src="sounds/kambing.ogg"></audio>
+
+  <script>
+    let selectedCircle = null;
+    let activeLines = []; // Array untuk menyimpan garis yang terhubung
+    const sounds = {
+      ayam: document.getElementById('ayam-sound'),
+      sapi: document.getElementById('sapi-sound'),
+      kambing: document.getElementById('kambing-sound')
+    };
+
+    document.querySelectorAll('.circle').forEach(circle => {
+      circle.addEventListener('click', (event) => {
+        const animal = circle.getAttribute('data-animal');
+        const position = circle.getAttribute('data-position');
+
+        if (position === 'left') {
+          if (selectedCircle && selectedCircle.element !== circle) {
+            selectedCircle.element.classList.remove('active');
+          }
+          selectedCircle = { animal, element: circle };
+          circle.classList.add('active');
+          
+          createTempLine(event.clientX, event.clientY); // Buat garis penghubung sementara
+
+          document.addEventListener('mousemove', followCursor);
+        } else if (position === 'right' && selectedCircle) {
+          if (selectedCircle.animal === animal) {
+            addPermanentLine(circle); // Tambahkan garis permanen
+            playSound(animal); // Mainkan suara
+          }
+          selectedCircle.element.classList.remove('active');
+          selectedCircle = null;
+          document.removeEventListener('mousemove', followCursor);
+          removeTempLine();
+        }
+      });
+    });
+
+    function createTempLine(x, y) {
+      removeTempLine();
+      let line = document.createElement('div');
+      line.classList.add('line');
+      line.style.backgroundColor = '#333';
+      line.style.left = `${x}px`;
+      line.style.top = `${y}px`;
+      line.dataset.temp = "true"; // Tandai sebagai garis sementara
+      document.body.appendChild(line);
+    }
+
+    function removeTempLine() {
+      const tempLine = document.querySelector('.line[data-temp="true"]');
+      if (tempLine) tempLine.remove();
+    }
+
+    function followCursor(event) {
+      const startRect = selectedCircle.element.getBoundingClientRect();
+      const startX = startRect.left + startRect.width / 2;
+      const startY = startRect.top + startRect.height / 2;
+      const endX = event.clientX;
+      const endY = event.clientY;
+      const length = Math.hypot(endX - startX, endY - startY);
+      const angle = Math.atan2(endY - startY, endX - startX) * (180 / Math.PI);
+
+      const tempLine = document.querySelector('.line[data-temp="true"]');
+      if (tempLine) {
+        tempLine.style.width = `${length}px`;
+        tempLine.style.transform = `rotate(${angle}deg)`;
+        tempLine.style.left = `${startX}px`;
+        tempLine.style.top = `${startY}px`;
+      }
+    }
+
+    function addPermanentLine(targetElement) {
+      const startRect = selectedCircle.element.getBoundingClientRect();
+      const endRect = targetElement.getBoundingClientRect();
+
+      const startX = startRect.left + startRect.width / 2;
+      const startY = startRect.top + startRect.height / 2;
+      const endX = endRect.left + endRect.width / 2;
+      const endY = endRect.top + endRect.height / 2;
+
+      const length = Math.hypot(endX - startX, endY - startY);
+      const angle = Math.atan2(endY - startY, endX - startX) * (180 / Math.PI);
+
+      const line = document.createElement('div');
+      line.classList.add('line');
+      line.style.backgroundColor = '#333';
+      line.style.width = `${length}px`;
+      line.style.transform = `rotate(${angle}deg)`;
+      line.style.left = `${startX}px`;
+      line.style.top = `${startY}px`;
+
+      activeLines.push(line);
+      document.body.appendChild(line);
+    }
+
+    function playSound(animal) {
+      if (sounds[animal]) {
+        sounds[animal].currentTime = 0; // Reset suara
+        sounds[animal].play();
+      }
+    }
+  </script>
+
+</body>
+</html>
