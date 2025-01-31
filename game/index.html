@@ -12,7 +12,7 @@
             background-image: url(background.jpg);
             background-size: cover;
             background-position: center;
-            height: 100vh; /* Memastikan body menutupi seluruh tinggi layar */
+            height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -51,24 +51,6 @@
             border-radius: 10px;
         }
 
-        #winPopup button:hover {
-            background-color: #73a775;
-        }
-
-        h1 {
-            color: white;
-            font-family: Arial, sans-serif;
-            font-size: 2em;
-            margin-top: 20px;
-        }
-
-        #message {
-            color: white;
-            font-size: 1.2em;
-            margin-top: 10px;
-        }
-
-        /* Popup Input Nama */
         #namePopup {
             display: flex;
             flex-direction: column;
@@ -87,8 +69,21 @@
             max-width: 400px;
         }
 
-        #namePopup h2 {
+        #playerSelection {
+            display: flex;
+            justify-content: space-around;
             margin-bottom: 15px;
+            width: 100%;
+        }
+
+        .player-option {
+            cursor: pointer;
+            border: 2px solid transparent;
+            border-radius: 10px;
+        }
+
+        .player-option.selected {
+            border: 2px solid #6feb74;
         }
 
         #namePopup input {
@@ -108,30 +103,30 @@
             border-radius: 10px;
             cursor: pointer;
         }
-
-        #namePopup button:hover {
-            background-color: #73a775;
-        }
     </style>
 </head>
 <body>
-    <h1>GAME MENANGKAP ANGKA</h1>
+    <h1 style="color: antiquewhite;">GAME MENANGKAP ANGKA</h1>
 
     <!-- Popup Input Nama -->
     <div id="namePopup">
-        <h2>Masukkan Nama Anda</h2>
+        <h2>MARI MULAI GAME</h2>
+
+        <div id="playerSelection">
+            <img src="satu.png" alt="Player 1" class="player-option" id="player1" width="80">
+            <img src="dua.png" alt="Player 2" class="player-option" id="player2" width="80">
+        </div>
+
         <input type="text" id="playerName" placeholder="Nama Anda">
         <button id="startButton">Mainkan Sekarang</button>
     </div>
 
     <canvas id="gameCanvas" width="700" height="550"></canvas>
-    
-    <!-- Container for the message -->
-    <div class="container-mess" style="background-color: black;">
+
+    <div class="container-mess" style="background-color: rgb(255, 253, 253); border-radius: 10px;">
         <p id="message"></p>
     </div>
 
-    <!-- Popup Win -->
     <div id="winPopup">
         <img src="win.gif" alt="" style="width: 25%;">
         <p id="winMessage" style="font-size: 16pt;"></p>
