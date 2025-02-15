@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BERHITUNG</title>
+    <style>
+        body {
+            background-image: url("background.jpg");
+            background-size: cover;
+            background-position: center center;
+            background-repeat: no-repeat;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+            margin: 0;
+            height: 95vh;
+        }
+
+        h1 {
+            font-size: 60px;
+            color: #fff;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        input[type='text'] { 
+            width: 300px;
+            height: 45px;
+            padding: 10px;
+            font-size: 20px;
+            margin: 10px;
+            border-radius: 10px;
+            border: 2px solid #ccc;
+            box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        
+        input[type='number'] { 
+            width: 100px;
+            height: 45px;
+            padding: 10px;
+            font-size: 20px;
+            margin: 10px;
+            border-radius: 10px;
+            border: 2px solid #ccc;
+            box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        
+        .soal-container {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+            display: inline-block;
+            margin: 30px;
+        }
+
+        .soal {
+            background: #fff;
+            padding: 20px;
+            border-radius: 15px;
+            transition: background 0.3s;
+            font-size: 40px;
+        }
+
+        .soal.benar {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .soal.salah {
+            background: #F44336;
+            color: white;
+        }
+
+        .simpan-hasil { 
+            background: green;
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 28px;
+            cursor: pointer;
+            box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        .simpan-hasil:hover {
+            background: darkgreen;
+        }
+    </style>
+    <!-- Tambahkan pustaka html2canvas -->
+    <script src="html2canvas.min.js"></script>
+</head>
+<body>
+    <h1>BERHITUNG ANGKA</h1>
+    <p style="font-size: 50px; color: white; font-weight: bolder; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);">Nama : <input type="text" id="nama" placeholder="" /></p>
+    <div id="soal-container"></div>
+    <button class="simpan-hasil" onclick="simpanHasil()">SIMPAN HASIL</button>
+
+    <script>
+        const soalContainer = document.getElementById('soal-container');
+        const totalSoal = 4;
+        let soal = [];
+
+        function buatSoal() {
+            soalContainer.innerHTML = '';
+            soal = [];
+            for (let i = 0; i < totalSoal; i++) {
+                const num1 = Math.floor(Math.random() * 10);
+                const num2 = Math.floor(Math.random() * 10);
+                const jawab = num1 + num2;
+
+                soal.push({ num1, num2, jawab });
+
+                soalContainer.innerHTML += `
+                    <div class="soal-container">
+                        <div class="soal">
+                            <div>${num1}</div>
+                            <div>+</div>
+                            <div>${num2}</div>
+                            <div>--------  +</div>
+                            <input type="number" id="jawaban-${i}" oninput="cekWarna(${i})" style="text-align: right;" dir="rtl" />
+                        </div>
+                    </div>`;
+            }
+        }
+
+        function cekWarna(index) {
+            const inputJawaban = document.getElementById(`jawaban-${index}`).value;
+            const kotakSoal = document.querySelectorAll('.soal')[index];
+            
+            if (inputJawaban !== "") {
+                if (parseInt(inputJawaban) === soal[index].jawab) {
+                    kotakSoal.classList.add('benar');
+                    kotakSoal.classList.remove('salah');
+                } else {
+                    kotakSoal.classList.add('salah');
+                    kotakSoal.classList.remove('benar');
+                }
+            } else {
+                kotakSoal.classList.remove('benar', 'salah');
+            }
+        }
+
+        function cekJawaban() {
+            soal.forEach((s, index) => {
+                const inputJawaban = document.getElementById(`jawaban-${index}`).value;
+                if (parseInt(inputJawaban) === s.jawab) {
+                    new Audio('benar.mp3').play();
+                }
+            });
+        }
+
+        function simpanHasil() {
+            cekJawaban();
+            
+            let nama = document.getElementById('nama').value.trim();
+            if (nama === "") {
+                alert("Masukkan nama terlebih dahulu!");
+                return;
+            }
+
+            nama = nama.replace(/[^a-zA-Z0-9_\-]/g, '');
+
+            html2canvas(document.body).then(canvas => {
+                const gambar = canvas.toDataURL('image/png');
+                const link = document.createElement('a');
+                link.href = gambar;
+                link.download = `hasil-${nama}.png`;
+                link.click();
+            });
+
+            buatSoal();
+
+            // Mengosongkan input nama dan jawaban
+            document.getElementById('nama').value = '';
+            const inputsJawaban = document.querySelectorAll('input[type="number"]');
+            inputsJawaban.forEach(input => input.value = '');
+        }
+
+        window.onload = buatSoal;
+    </script>
+</body>
+</html>
