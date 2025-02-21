@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Puzzle Huruf</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f4f4f4;
+            padding: 20px;
+        }
+        h1 {
+            font-size: 36px;
+        }
+        #nama {
+            padding: 10px;
+            font-size: 18px;
+            width: 250px;
+            margin-bottom: 20px;
+        }
+        #gambar-container {
+            margin: 20px auto;
+        }
+        #gambar-container img {
+            width: 300px;
+            border-radius: 10px;
+        }
+        #jawaban-container {
+            font-size: 32px;
+            font-weight: bold;
+            letter-spacing: 5px;
+            margin: 20px 0;
+            min-height: 40px;
+            display: flex;
+            justify-content: center;
+            gap: 2px;
+        }
+        .huruf-jawaban {
+            display: inline-block;
+            width: 35px;
+            text-align: center;
+        }
+        .kotak-huruf {
+            display: inline-block;
+            padding: 15px;
+            font-size: 24px;
+            background-color: #3498db;
+            color: white;
+            border-radius: 10px;
+            margin: 5px;
+            cursor: pointer;
+            box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.3);
+        }
+        .kotak-huruf:hover {
+            background-color: #2980b9;
+        }
+        #huruf-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            max-width: 400px;
+            margin: auto;
+        }
+        #contoh{
+            font-size: 100px;
+        }
+    </style>
+</head>
+<body>
+    <h1>MENCARI HURUF</h1>
+    <input type="text" id="nama" placeholder="Masukkan nama...">
+    <div id="gambar-container">
+        <img src="simpang_lima.jpg" alt="Simpang Lima">
+    </div>
+    <div id="contoh">SIMPANG LIMA GUMUL</div>
+    <div id="jawaban-container"></div>
+    <div id="huruf-container"></div>
+
+    <script>
+        const kataAsli = "SIMPANG LIMA GUMUL";
+        let jawaban = kataAsli.split('').map(c => c === ' ' ? ' ' : '_');
+        let hurufAcak = kataAsli.replace(/ /g, '').split('').sort(() => Math.random() - 0.5);
+
+        function tampilkanJawaban() {
+            let container = document.getElementById('jawaban-container');
+            container.innerHTML = '';
+            jawaban.forEach(huruf => {
+                let span = document.createElement('span');
+                span.className = 'huruf-jawaban';
+                span.innerText = huruf;
+                container.appendChild(span);
+            });
+        }
+        
+        function buatKotakHuruf() {
+            const container = document.getElementById('huruf-container');
+            container.innerHTML = '';
+            hurufAcak.forEach(huruf => {
+                let div = document.createElement('div');
+                div.className = 'kotak-huruf';
+                div.innerText = huruf;
+                div.onclick = () => pilihHuruf(huruf, div);
+                container.appendChild(div);
+            });
+        }
+        
+        function pilihHuruf(huruf, elemen) {
+            let index = jawaban.indexOf('_');
+            while (index !== -1) {
+                if (kataAsli[index] === huruf) {
+                    jawaban[index] = huruf;
+                    tampilkanJawaban();
+                    elemen.style.visibility = 'hidden';
+                    break;
+                }
+                index = jawaban.indexOf('_', index + 1);
+            }
+        }
+        
+        tampilkanJawaban();
+        buatKotakHuruf();
+    </script>
+</body>
+</html>
