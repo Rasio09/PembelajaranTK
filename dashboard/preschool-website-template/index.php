@@ -2,6 +2,7 @@
 
 include("connect.php");
 
+// fasilitas
 $sql = "SELECT * FROM tb_fasilitas";
 $result = $conn->query($sql);
 
@@ -218,7 +219,7 @@ $result = $conn->query($sql);
         </div>
         <!-- Call To Action End -->
 
-        <!-- Appointment Start -->
+        <!-- Masukan Start -->
         <div class="container-xxl py-5" id="masukan">
             <div class="container">
                 <div class="bg-light rounded">
@@ -226,35 +227,35 @@ $result = $conn->query($sql);
                         <div class="col-lg-6 wow fadeIn" data-wow-delay="0.1s">
                             <div class="h-100 d-flex flex-column justify-content-center p-5">
                                 <h1 class="mb-4" style="font-family: cursive;">Kirim Masukan</h1>
-                                <form method="POST" action="">
+                                <form method="POST" action="proses/simpan_masukan.php">
                                     <div class="row g-3">
                                         <div class="col-sm-6">
                                             <div class="form-floating">
-                                                <input type="text" class="form-control border-0" id="gname" placeholder="Gurdian Name">
-                                                <label for="gname">Nama Lengkap</label>
+                                                <input type="text" class="form-control border-0" id="nama_lengkap" name="nama_lengkap" placeholder="Nama Lengkap">
+                                                <label for="nama_lengkap">Nama Lengkap</label>
                                             </div>
                                         </div>
                                         <div class="col-sm-6">
                                             <div class="form-floating">
-                                                <input type="email" class="form-control border-0" id="gmail" placeholder="Gurdian Email">
-                                                <label for="gmail">Email</label>
+                                                <input type="email" class="form-control border-0" id="email" name="email" placeholder="Email">
+                                                <label for="email">Email</label>
                                             </div>
                                         </div>
                                         <div class="col-sm-6">
                                             <div class="form-floating">
-                                                <input type="text" class="form-control border-0" id="cname" placeholder="Child Name">
-                                                <label for="cname">Nama Panggilan</label>
+                                                <input type="text" class="form-control border-0" id="nama_panggil" name="nama_panggil" placeholder="Nama Panggilan">
+                                                <label for="nama_panggil">Nama Panggilan</label>
                                             </div>
                                         </div>
                                         <div class="col-sm-6">
                                             <div class="form-floating">
-                                                <input type="text" class="form-control border-0" id="cage" placeholder="Child Age">
-                                                <label for="cage">Usia</label>
+                                                <input type="text" class="form-control border-0" id="usia" name="usia" placeholder="Usia">
+                                                <label for="usia">Usia</label>
                                             </div>
                                         </div>
                                         <div class="col-12">
                                             <div class="form-floating">
-                                                <textarea class="form-control border-0" placeholder="Leave a message here" id="message" style="height: 150px; resize:none;"></textarea>
+                                                <textarea class="form-control border-0" placeholder="Leave a message here" id="message" name="message" style="height: 150px; resize:none;"></textarea>
                                                 <label for="message">Pesan Masukan Request game</label>
                                             </div>
                                         </div>
@@ -274,7 +275,8 @@ $result = $conn->query($sql);
                 </div>
             </div>
         </div>
-        <!-- Appointment End -->
+
+        <!-- Masukan End -->
 
         <!-- Footer Start -->
         <div class="container-fluid bg-dark text-white-50 footer pt-5 mt-5 wow fadeIn" data-wow-delay="0.1s">
