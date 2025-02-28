@@ -12,30 +12,27 @@
                     <!-- Kolom Fitur EDUTK -->
                     <div class="col-md-6 col-lg-4 mb-3">
                         <h5 class="text-white">EDUTK Features</h5>
-                        <a href="#" class="d-block text-white-50">About Us</a>
-                        <a href="#" class="d-block text-white-50">Contact Us</a>
-                        <a href="#" class="d-block text-white-50">Services</a>
-                        <a href="#" class="d-block text-white-50">Privacy Policy</a>
-                        <a href="#" class="d-block text-white-50">Terms & Conditions</a>
+                        <a href="about.php" class="d-block text-white-50">About</a>
+                        <a href="contact.php" class="d-block text-white-50">Contact</a>
+                        <a href="game-list.php" class="d-block text-white-50">Game List</a>
                     </div>
 
                     <!-- Kolom Menu Footer -->
                     <div class="col-md-12 col-lg-4 mb-3">
                         <div class="text-center">
-                            <a href="#" class="footer-link me-3">Home</a>
-                            <a href="#" class="footer-link me-3">About</a>
-                            <a href="#" class="footer-link me-3">Game List</a>
+                            <a href="index.php" class="footer-link me-3">Home</a>
+                            <a href="about.php" class="footer-link me-3">About</a>
+                            <a href="game-list.php" class="footer-link me-3">Game List</a>
                             <a href="masukan.php" class="footer-link">Masukan</a>
                         </div>
                         <br>
                         <br>
                         <!-- Logo Media Sosial -->
-                        <div class="d-flex pt-2" style="margin-left: 50px;">
-                            <a class="btn btn-outline-light btn-social" href=""><i class="fab fa-twitter"></i></a>
-                            <a class="btn btn-outline-light btn-social" href=""><i class="fab fa-facebook-f"></i></a>
+                        <div class="d-flex pt-2 justify-content-center">
                             <a class="btn btn-outline-light btn-social" href=""><i class="fab fa-youtube"></i></a>
-                            <a class="btn btn-outline-light btn-social" href=""><i class="fab fa-linkedin-in"></i></a>
+                            <a class="btn btn-outline-light btn-social" href=""><i class="fab fa-instagram"></i></a>
                         </div>
+
                     </div>
                 </div>
                 <div class="text-center text-white-50 mt-3">
