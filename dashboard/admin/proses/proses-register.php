@@ -35,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
               </script>";
         } else {
             // Masukkan data ke database
-            $sql = "INSERT INTO tb_admin VALUES ('', '$nama', 'username', '$hashed_password', '$email')";
+            $sql = "INSERT INTO tb_admin VALUES ('', '$nama', '$username', '$hashed_password', '$email')";
 
             if ($conn->query($sql) === TRUE) {
                 echo "<script>

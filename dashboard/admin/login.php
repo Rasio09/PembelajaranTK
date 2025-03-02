@@ -25,28 +25,27 @@
                             <div class="text-center">
                                 <h1 class="h4 text-gray-900 mb-4" style="font-family: cursive; font-weight: bold;">LOGIN ADMIN</h1>
                             </div>
-                            <form class="user" method="POST" action="proses/">
+                            <form class="user" method="POST" action="proses/proses-login.php">
                                 <div class="form-group">
-                                    <input type="username" class="form-control form-control-user" name="username"
-                                        id="username" aria-describedby="emailHelp"
-                                        placeholder="Username">
+                                    <input type="text" class="form-control form-control-user" name="username"
+                                        id="username" placeholder="Username" 
+                                        value="<?php echo isset($_COOKIE['username']) ? $_COOKIE['username'] : ''; ?>">
                                 </div>
                                 <div class="form-group">
                                     <input type="password" class="form-control form-control-user" name="password"
-                                        id="password" placeholder="Password">
+                                        id="password" placeholder="Password"
+                                        value="<?php echo isset($_COOKIE['password']) ? $_COOKIE['password'] : ''; ?>">
                                 </div>
                                 <div class="form-group">
                                     <div class="custom-control custom-checkbox small">
-                                        <input type="checkbox" class="custom-control-input" id="customCheck">
-                                        <label class="custom-control-label" for="customCheck">Remember
-                                            Me</label>
+                                        <input type="checkbox" class="custom-control-input" id="customCheck" name="remember"
+                                            <?php echo isset($_COOKIE['username']) ? 'checked' : ''; ?>>
+                                        <label class="custom-control-label" for="customCheck">Remember Me</label>
                                     </div>
                                 </div>
-                                <a href="index.html" class="btn btn-primary btn-user btn-block" style="font-weight: bold;">
-                                    Login
-                                </a>
-                                <hr>
+                                <button type="submit" class="btn btn-primary btn-user btn-block" style="font-weight: bold;">Login</button>
                             </form>
+
                             <hr>
                             <div class="text-center">
                                 <a class="small" href="forgot-password.html">Forgot Password?</a>
@@ -56,13 +55,9 @@
                 </div>
             </div>
         </div>
-
     </div>
-
 </div>
-
 </div>
-
 
     <!-- Bootstrap core JavaScript-->
     <script src="vendor/jquery/jquery.min.js"></script>
