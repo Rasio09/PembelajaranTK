@@ -1,6 +1,13 @@
 <?php
     $title = "REGISTER";
     include("header.php");
+
+    include("../connect.php");
+    session_start();
+    if (!isset($_SESSION['id_admin'])) {
+        header("Location: login.php");
+        exit;
+    }
 ?>
 
 <body class="bg-gradient-primary">
@@ -20,7 +27,7 @@
                         <div class="text-center">
                             <h1 class="h4 text-gray-900 mb-4" style="font-family=cursive; font-weight: bold;">REGISTRASI ADMIN</h1>
                         </div>
-                        <form class="user" method="POST" action="proses/proses-register.php">
+                        <form class="user" method="POST" action="proses/proses-register.php" enctype="multipart/form-data">
                             <div class="form-group">
                                 <input type="text" class="form-control form-control-user" id="nama" name="nama" placeholder="Nama Lengkap" required>
                             </div>
@@ -38,8 +45,12 @@
                                     <input type="password" class="form-control form-control-user" name="confirm_password" id="ulangi-password" placeholder="Ulangi Password" required>
                                 </div>
                             </div>
-                            <button type="submit" class="btn btn-primary btn-user btn-block">Register Account</button>
-                            <hr>
+                            <div class="form-group">
+                                <label for="foto">Upload Foto (JPG/PNG)</label>
+                                <input type="file" class="form-control" id="foto" name="foto" accept=".jpg, .jpeg, .png" required>
+                                <p style="color: red; font-size: 12px;">*maksimal 2 mb (jpg, png)</p>
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-user btn-block">Register</button>
                         </form>
 
                         <hr>
