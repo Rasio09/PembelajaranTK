@@ -54,12 +54,6 @@
                         </form>
 
                         <hr>
-                        <div class="text-center">
-                            <a class="small" href="forgot-password.html">Forgot Password?</a>
-                        </div>
-                        <div class="text-center">
-                            <a class="small" href="login.php">Already have an account? Login!</a>
-                        </div>
                     </div>
                 </div>
             </div>
