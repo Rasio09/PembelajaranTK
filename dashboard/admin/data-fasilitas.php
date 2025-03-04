@@ -8,13 +8,46 @@ if (!isset($_SESSION['id_admin'])) {
 }
 
 // title web header
-$title = "DATA ADMIN";
+$title = "DATA FASILITAS";
 include("header.php");
 
 // mengambil data admin
 $sql_admin_data = "SELECT * FROM tb_admin";
 $result_admin_data = $conn->query($sql_admin_data);
 
+
+// inputan data admin
+// Jika tombol submit ditekan, proses data
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $nama = $_POST['nama'];
+    $username = $_POST['username'];
+    $password = password_hash($_POST['password'], PASSWORD_DEFAULT); // Hash password
+    $email = $_POST['email'];
+    $nomor_wa = $_POST['nomor_wa'];
+
+    // Upload Foto
+    $target_dir = "img_admin/";
+    $foto_name = basename($_FILES["foto"]["name"]);
+    $foto_ext = pathinfo($foto_name, PATHINFO_EXTENSION);
+    $foto_final_name = uniqid() . "." . $foto_ext;
+    $target_file = $target_dir . $foto_final_name;
+    
+    if (move_uploaded_file($_FILES["foto"]["tmp_name"], $target_file)) {
+        $direktori_foto = $target_file;
+        
+        // Simpan ke database
+        $sql_insert = "INSERT INTO tb_admin (id_admin, nama, username, password, email, direktori_foto, nomor_wa) 
+                       VALUES ('', '$nama', '$username', '$password', '$email', '$direktori_foto', '$nomor_wa')";
+        
+        if ($conn->query($sql_insert) === TRUE) {
+            echo "<script>alert('Data berhasil ditambahkan!'); window.location.href='data-admin.php';</script>";
+        } else {
+            echo "<script>alert('Terjadi kesalahan!');</script>";
+        }
+    } else {
+        echo "<script>alert('Gagal mengunggah foto!');</script>";
+    }
+}
 ?>
 
 <body id="page-top">
@@ -23,7 +56,9 @@ $result_admin_data = $conn->query($sql_admin_data);
     <div id="wrapper">
 
         <!-- Sidebar -->
-        <?php include("sidebar.php"); ?>
+        <?php
+            include("sidebar.php");
+        ?>
         <!-- End of Sidebar -->
 
         <!-- Content Wrapper -->
@@ -34,6 +69,7 @@ $result_admin_data = $conn->query($sql_admin_data);
 
                 <!-- Topbar -->
                 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+
                     <!-- Sidebar Toggle (Topbar) -->
                     <form class="form-inline">
                         <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
@@ -193,6 +229,7 @@ $result_admin_data = $conn->query($sql_admin_data);
                         ?>
 
                     </ul>
+
                 </nav>
                 <!-- End of Topbar -->
 
@@ -201,45 +238,46 @@ $result_admin_data = $conn->query($sql_admin_data);
 
                     <!-- Page Heading -->
                     <h1 class="h3 mb-2 text-gray-800" style="font-weight: bold;">DATA ADMIN</h1>
-                    <p class="mb-4">Data List Admin yang Terdaftar
-                        <a href="register.php" style="font-weight: bold;">Tambah Data Admin</a>
+                    <p class="mb-4">Data List Admin yang Terdaftar <br><br>
+                        <button id="showFormBtn" class="btn btn-primary">Tambah Data Admin</button>
                     </p>
 
-                    <!-- Form Edit Admin (Awalnya disembunyikan) -->
+                    <!-- tambah inputan admin -->
+                     <!-- Tombol Tambah Data Admin -->
+                    
+
+                    <!-- Form Tambah Admin (Awalnya disembunyikan) -->
                     <div id="adminForm" style="display: none; margin-top: 20px;">
                         <div class="card shadow mb-4">
                             <div class="card-header py-3">
-                                <h6 class="m-0 font-weight-bold text-primary">EDIT DATA ADMIN</h6>
+                                <h6 class="m-0 font-weight-bold text-primary">Tambah Data Admin</h6>
                             </div>
                             <div class="card-body">
-                                <form action="proses/update-admin.php" method="POST" enctype="multipart/form-data">
-                                    <input type="hidden" name="id" id="adminId">
-
+                                <form action="" method="POST" enctype="multipart/form-data">
                                     <div class="form-group">
                                         <label>Nama</label>
-                                        <input type="text" name="nama" id="adminNama" class="form-control" required>
+                                        <input type="text" name="nama" class="form-control" required>
                                     </div>
-
                                     <div class="form-group">
                                         <label>Username</label>
-                                        <input type="text" name="username" id="adminUsername" class="form-control" required>
+                                        <input type="text" name="username" class="form-control" required>
                                     </div>
-
                                     <div class="form-group">
-                                        <label>Password (Isi jika ingin mengganti)</label>
-                                        <input type="password" name="password" class="form-control">
+                                        <label>Password</label>
+                                        <input type="password" name="password" class="form-control" required>
                                     </div>
-
                                     <div class="form-group">
                                         <label>Email</label>
-                                        <input type="email" name="email" id="adminEmail" class="form-control" required>
+                                        <input type="email" name="email" class="form-control" required>
                                     </div>
-
+                                    <div class="form-group">
+                                        <label>Foto</label>
+                                        <input type="file" name="foto" class="form-control" required>
+                                    </div>
                                     <div class="form-group">
                                         <label>Nomor WA</label>
-                                        <input type="text" name="nomor_wa" id="adminNomorWa" class="form-control" required>
+                                        <input type="text" name="nomor_wa" class="form-control" required>
                                     </div>
-
                                     <button type="submit" class="btn btn-success">Simpan</button>
                                 </form>
                             </div>
@@ -261,28 +299,24 @@ $result_admin_data = $conn->query($sql_admin_data);
                                             <th>Email</th>
                                             <th>Direktori Foto</th>
                                             <th>Nomor WA</th>
-                                            <th>Aksi</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <?php
-                                        if ($result_admin_data->num_rows > 0) {
-                                            while ($row_admin_data = $result_admin_data->fetch_assoc()) {
-                                                echo "
-                                                    <tr>
-                                                        <td>" . $row_admin_data['id_admin'] . "</td>
-                                                        <td>" . $row_admin_data["nama"] . "</td>
-                                                        <td>" . $row_admin_data["email"] . "</td>
-                                                        <td>" . $row_admin_data["direktori_foto"] . "</td>
-                                                        <td>" . $row_admin_data["nomor_wa"] . "</td>
-                                                        <td>
-                                                            <button class='btn btn-info' onclick=\"editAdmin(" . $row_admin_data['id_admin'] . ", '" . $row_admin_data['nama'] . "', '" . $row_admin_data['username'] . "', '" . $row_admin_data['email'] . "', '" . $row_admin_data['nomor_wa'] . "')\">Edit</button>
-                                                            <a href='proses/delete-admin.php?id=" . $row_admin_data['id_admin'] . "' class='btn btn-danger' style='margin-top:6px' onclick=\"return confirm('Apakah Anda yakin ingin menghapus data ini?');\">Hapus</a>
-                                                        </td>
-                                                    </tr>
-                                                ";
+
+                                            if($result_admin_data->num_rows > 0){
+                                                while($row_admin_data = $result_admin_data->fetch_assoc()){
+                                                    echo "
+                                                        <tr>
+                                                            <td>".$row_admin_data['id_admin']."</td>
+                                                            <td>".$row_admin_data["nama"]."</td>
+                                                            <td>".$row_admin_data["email"]."</td>
+                                                            <td>".$row_admin_data["direktori_foto"]."</td>
+                                                            <td>".$row_admin_data["nomor_wa"]."</td>
+                                                        </tr>
+                                                    ";
+                                                }
                                             }
-                                        }
                                         ?>
                                     </tbody>
                                 </table>
@@ -292,6 +326,7 @@ $result_admin_data = $conn->query($sql_admin_data);
 
                 </div>
                 <!-- /.container-fluid -->
+
             </div>
             <!-- End of Main Content -->
 
@@ -316,19 +351,36 @@ $result_admin_data = $conn->query($sql_admin_data);
         <i class="fas fa-angle-up"></i>
     </a>
 
+    <!-- Logout Modal-->
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                    <a class="btn btn-primary" href="login.php">Logout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Script untuk Menampilkan Form -->
     <script>
-        function editAdmin(id, nama, username, email, nomor_wa) {
-            // Menampilkan form
-            document.getElementById('adminForm').style.display = 'block';
-
-            // Mengisi form dengan data yang dipilih
-            document.getElementById('adminId').value = id;
-            document.getElementById('adminNama').value = nama;
-            document.getElementById('adminUsername').value = username;
-            document.getElementById('adminEmail').value = email;
-            document.getElementById('adminNomorWa').value = nomor_wa;
-        }
+        document.getElementById('showFormBtn').addEventListener('click', function() {
+            var form = document.getElementById('adminForm');
+            if (form.style.display === 'none') {
+                form.style.display = 'block';
+            } else {
+                form.style.display = 'none';
+            }
+        });
     </script>
 
     <!-- Bootstrap core JavaScript-->

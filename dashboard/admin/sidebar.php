@@ -39,7 +39,7 @@
 
 <!-- Input Fasilitas -->
 <li class="nav-item">
-    <a class="nav-link" href="tables.html">
+    <a class="nav-link" href="#">
         <i class="fas fa-fw fa-table"></i>
         <span>Input Fasilitas</span></a>
 </li>
@@ -60,7 +60,7 @@
 </li>
 <!-- Data Fasilitas -->
 <li class="nav-item">
-    <a class="nav-link" href="tables.html">
+    <a class="nav-link" href="data-fasilitas.php">
         <i class="fas fa-fw fa-table"></i>
         <span>Data Fasilitas</span></a>
 </li>
