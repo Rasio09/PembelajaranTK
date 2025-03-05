@@ -16,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $result = $query->get_result();
     $admin = $result->fetch_assoc();
     $password_lama = $admin['password'];
-
+    
     // Jika password baru diisi, hash ulang; jika tidak, gunakan password lama
     if (!empty($password)) {
         $password_hash = password_hash($password, PASSWORD_BCRYPT);

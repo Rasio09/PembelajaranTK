@@ -11,43 +11,10 @@ if (!isset($_SESSION['id_admin'])) {
 $title = "DATA FASILITAS";
 include("header.php");
 
-// mengambil data admin
-$sql_admin_data = "SELECT * FROM tb_admin";
-$result_admin_data = $conn->query($sql_admin_data);
+// mengambil data 
+$sql_fasilitas_data = "SELECT * FROM tb_fasilitas";
+$result_fasilitas_data = $conn->query($sql_fasilitas_data);
 
-
-// inputan data admin
-// Jika tombol submit ditekan, proses data
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $nama = $_POST['nama'];
-    $username = $_POST['username'];
-    $password = password_hash($_POST['password'], PASSWORD_DEFAULT); // Hash password
-    $email = $_POST['email'];
-    $nomor_wa = $_POST['nomor_wa'];
-
-    // Upload Foto
-    $target_dir = "img_admin/";
-    $foto_name = basename($_FILES["foto"]["name"]);
-    $foto_ext = pathinfo($foto_name, PATHINFO_EXTENSION);
-    $foto_final_name = uniqid() . "." . $foto_ext;
-    $target_file = $target_dir . $foto_final_name;
-    
-    if (move_uploaded_file($_FILES["foto"]["tmp_name"], $target_file)) {
-        $direktori_foto = $target_file;
-        
-        // Simpan ke database
-        $sql_insert = "INSERT INTO tb_admin (id_admin, nama, username, password, email, direktori_foto, nomor_wa) 
-                       VALUES ('', '$nama', '$username', '$password', '$email', '$direktori_foto', '$nomor_wa')";
-        
-        if ($conn->query($sql_insert) === TRUE) {
-            echo "<script>alert('Data berhasil ditambahkan!'); window.location.href='data-admin.php';</script>";
-        } else {
-            echo "<script>alert('Terjadi kesalahan!');</script>";
-        }
-    } else {
-        echo "<script>alert('Gagal mengunggah foto!');</script>";
-    }
-}
 ?>
 
 <body id="page-top">
@@ -56,9 +23,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <div id="wrapper">
 
         <!-- Sidebar -->
-        <?php
-            include("sidebar.php");
-        ?>
+        <?php include("sidebar.php"); ?>
         <!-- End of Sidebar -->
 
         <!-- Content Wrapper -->
@@ -69,7 +34,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                 <!-- Topbar -->
                 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
-
                     <!-- Sidebar Toggle (Topbar) -->
                     <form class="form-inline">
                         <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
@@ -229,7 +193,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         ?>
 
                     </ul>
-
                 </nav>
                 <!-- End of Topbar -->
 
@@ -237,47 +200,47 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <div class="container-fluid">
 
                     <!-- Page Heading -->
-                    <h1 class="h3 mb-2 text-gray-800" style="font-weight: bold;">DATA ADMIN</h1>
-                    <p class="mb-4">Data List Admin yang Terdaftar <br><br>
-                        <button id="showFormBtn" class="btn btn-primary">Tambah Data Admin</button>
+                    <h1 class="h3 mb-2 text-gray-800" style="font-weight: bold;">DATA FASILITAS</h1>
+                    <p class="mb-4">Data List Admin yang Terdaftar
+                        <a href="register.php" style="font-weight: bold;">Tambah Data Fasilitas</a>
                     </p>
 
-                    <!-- tambah inputan admin -->
-                     <!-- Tombol Tambah Data Admin -->
-                    
-
-                    <!-- Form Tambah Admin (Awalnya disembunyikan) -->
+                    <!-- Form Edit Admin (Awalnya disembunyikan) -->
                     <div id="adminForm" style="display: none; margin-top: 20px;">
                         <div class="card shadow mb-4">
                             <div class="card-header py-3">
-                                <h6 class="m-0 font-weight-bold text-primary">Tambah Data Admin</h6>
+                                <h6 class="m-0 font-weight-bold text-primary">EDIT DATA FASILITAS</h6>
                             </div>
                             <div class="card-body">
-                                <form action="" method="POST" enctype="multipart/form-data">
+                                <form action="proses/update-fasilitas.php" method="POST" enctype="multipart/form-data">
+                                    <input type="hidden" name="id" id="fasilitasId">
+
                                     <div class="form-group">
-                                        <label>Nama</label>
-                                        <input type="text" name="nama" class="form-control" required>
+                                        <label>Judul Fasilitas</label>
+                                        <input type="text" name="judul_fasilitas" id="judul" class="form-control" required>
                                     </div>
+
                                     <div class="form-group">
-                                        <label>Username</label>
-                                        <input type="text" name="username" class="form-control" required>
+                                        <label>Isi Fasilitas</label>
+                                        <textarea name="isi_fasilitas" id="isi" class="form-control" required style="height: 120px; resize: none;"></textarea>
                                     </div>
+
                                     <div class="form-group">
-                                        <label>Password</label>
-                                        <input type="password" name="password" class="form-control" required>
+                                        <label>Icon</label>
+                                        <input type="text" name="icon_fasilitas" id="icon" class="form-control" required>
                                     </div>
+
                                     <div class="form-group">
-                                        <label>Email</label>
-                                        <input type="email" name="email" class="form-control" required>
+                                        <label>Color Hover</label>
+                                        <!-- Dropdown instead of text input for Color Hover -->
+                                        <select name="color_hover" id="color" class="form-control" required>
+                                            <option value="danger">Danger</option>
+                                            <option value="info">Info</option>
+                                            <option value="warning">Warning</option>
+                                            <option value="success">Success</option>
+                                        </select>
                                     </div>
-                                    <div class="form-group">
-                                        <label>Foto</label>
-                                        <input type="file" name="foto" class="form-control" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Nomor WA</label>
-                                        <input type="text" name="nomor_wa" class="form-control" required>
-                                    </div>
+
                                     <button type="submit" class="btn btn-success">Simpan</button>
                                 </form>
                             </div>
@@ -295,28 +258,32 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                     <thead>
                                         <tr>
                                             <th>ID</th>
-                                            <th>Nama</th>
-                                            <th>Email</th>
-                                            <th>Direktori Foto</th>
-                                            <th>Nomor WA</th>
+                                            <th>Judul Fasilitas</th>
+                                            <th>Isi Fasilitas</th>
+                                            <th>Icon</th>
+                                            <th>Color Hover</th>
+                                            <th>Aksi</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <?php
-
-                                            if($result_admin_data->num_rows > 0){
-                                                while($row_admin_data = $result_admin_data->fetch_assoc()){
-                                                    echo "
-                                                        <tr>
-                                                            <td>".$row_admin_data['id_admin']."</td>
-                                                            <td>".$row_admin_data["nama"]."</td>
-                                                            <td>".$row_admin_data["email"]."</td>
-                                                            <td>".$row_admin_data["direktori_foto"]."</td>
-                                                            <td>".$row_admin_data["nomor_wa"]."</td>
-                                                        </tr>
-                                                    ";
-                                                }
+                                        if ($result_fasilitas_data->num_rows > 0) {
+                                            while ($row_fasilitas_data = $result_fasilitas_data->fetch_assoc()) {
+                                                echo "
+                                                    <tr>
+                                                        <td>" . $row_fasilitas_data['id_fasilitas'] . "</td>
+                                                        <td>" . $row_fasilitas_data["judul_fasilitas"] . "</td>
+                                                        <td>" . $row_fasilitas_data["isi_fasilitas"] . "</td>
+                                                        <td>" . $row_fasilitas_data["icon"] . "</td>
+                                                        <td>" . $row_fasilitas_data["color_hover"] . "</td>
+                                                        <td>
+                                                            <button class='btn btn-info' onclick=\"editAdmin(" . $row_fasilitas_data['id_fasilitas'] . ", '" . $row_fasilitas_data['judul_fasilitas'] . "', '" . $row_fasilitas_data['isi_fasilitas'] . "', '" . $row_fasilitas_data['icon'] . "', '" . $row_fasilitas_data['color_hover'] . "')\">Edit</button>
+                                                            <a href='proses/delete-admin.php?id=" . $row_fasilitas_data['id_fasilitas'] . "' class='btn btn-danger' style='margin-top:6px' onclick=\"return confirm('Apakah Anda yakin ingin menghapus data ini?');\">Hapus</a>
+                                                        </td>
+                                                    </tr>
+                                                ";
                                             }
+                                        }
                                         ?>
                                     </tbody>
                                 </table>
@@ -326,7 +293,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                 </div>
                 <!-- /.container-fluid -->
-
             </div>
             <!-- End of Main Content -->
 
@@ -365,7 +331,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="login.php">Logout</a>
+                    <a class="btn btn-primary" href="proses/proses-logout.php">Logout</a>
                 </div>
             </div>
         </div>
@@ -373,14 +339,36 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     <!-- Script untuk Menampilkan Form -->
     <script>
-        document.getElementById('showFormBtn').addEventListener('click', function() {
-            var form = document.getElementById('adminForm');
-            if (form.style.display === 'none') {
-                form.style.display = 'block';
-            } else {
-                form.style.display = 'none';
+        function editAdmin(id, judul, isi, icon, color) {
+            // Menampilkan form
+            document.getElementById('adminForm').style.display = 'block';
+
+            // Mengisi form dengan data yang dipilih
+            document.getElementById('fasilitasId').value = id;
+            document.getElementById('judul').value = judul;
+            document.getElementById('isi').value = isi;
+            document.getElementById('icon').value = icon;
+            // Menentukan nilai untuk Color Hover dropdown
+            const colorSelect = document.getElementById('color');
+            
+            // Set selected value based on 'nomor_wa'
+            switch (color) {
+                case 'danger':
+                    colorSelect.value = 'danger';
+                    break;
+                case 'info':
+                    colorSelect.value = 'info';
+                    break;
+                case 'warning':
+                    colorSelect.value = 'warning';
+                    break;
+                case 'success':
+                    colorSelect.value = 'success';
+                    break;
+                default:
+                    colorSelect.value = ''; // Default if no match
             }
-        });
+        }
     </script>
 
     <!-- Bootstrap core JavaScript-->
