@@ -13,15 +13,15 @@ if (!isset($_GET['id'])) {
     exit;
 }
 
-$id_admin = $_GET['id'];
+$id_fasilitas = $_GET['id'];
 
 // Hapus data dari database
-$sql = "DELETE FROM tb_admin WHERE id_admin = ?";
+$sql = "DELETE FROM tb_fasilitas WHERE id_fasilitas = ?";
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("i", $id_admin);
+$stmt->bind_param("i", $id_fasilitas);
 
 if ($stmt->execute()) {
-    echo "<script>alert('Data berhasil dihapus!'); window.location.href = '../data-admin.php';</script>";
+    echo "<script>alert('Data berhasil dihapus!'); window.location.href = '../data-fasilitas.php';</script>";
 } else {
     echo "Gagal menghapus data!";
 }

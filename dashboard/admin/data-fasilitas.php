@@ -201,12 +201,52 @@ $result_fasilitas_data = $conn->query($sql_fasilitas_data);
 
                     <!-- Page Heading -->
                     <h1 class="h3 mb-2 text-gray-800" style="font-weight: bold;">DATA FASILITAS</h1>
-                    <p class="mb-4">Data List Admin yang Terdaftar
-                        <a href="register.php" style="font-weight: bold;">Tambah Data Fasilitas</a>
-                    </p>
+                    <p class="mb-2">Data List Fasilitas</p>
+                    <button id='showFormBtnTambah' class='btn btn-primary' style="margin-bottom: 20px;">Tambah Data Fasilitas</button>
 
-                    <!-- Form Edit Admin (Awalnya disembunyikan) -->
-                    <div id="adminForm" style="display: none; margin-top: 20px;">
+                    <!-- Form Tambah Data fasilitas (Awalnya disembunyikan) -->
+                    <div id="fasilitasFormTambah" style="display: none; margin-top: 20px;">
+                        <div class="card shadow mb-4">
+                            <div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-primary">TAMBAH DATA FASILITAS</h6>
+                            </div>
+                            <div class="card-body">
+                                <form action="proses/tambah-fasilitas.php" method="POST" enctype="multipart/form-data">
+                                    <input type="hidden" name="id" id="fasilitasIdtb">
+
+                                    <div class="form-group">
+                                        <label>Judul Fasilitas</label>
+                                        <input type="text" name="judul_fasilitas" id="judultb" class="form-control" required>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>Isi Fasilitas</label>
+                                        <textarea name="isi_fasilitas" id="isitb" class="form-control" required style="height: 120px; resize: none;"></textarea>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>Icon</label>
+                                        <input type="text" name="icon_fasilitas" id="icontb" class="form-control" required>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>Color Hover</label>
+                                        <select name="color_hover" id="colortb" class="form-control" required>
+                                            <option value="danger">Danger</option>
+                                            <option value="info">Info</option>
+                                            <option value="warning">Warning</option>
+                                            <option value="success">Success</option>
+                                        </select>
+                                    </div>
+
+                                    <button type="submit" class="btn btn-success">Tambah</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Form Edit fasilitas (Awalnya disembunyikan) -->
+                    <div id="fasilitasForm" style="display: none; margin-top: 20px;">
                         <div class="card shadow mb-4">
                             <div class="card-header py-3">
                                 <h6 class="m-0 font-weight-bold text-primary">EDIT DATA FASILITAS</h6>
@@ -278,7 +318,7 @@ $result_fasilitas_data = $conn->query($sql_fasilitas_data);
                                                         <td>" . $row_fasilitas_data["color_hover"] . "</td>
                                                         <td>
                                                             <button class='btn btn-info' onclick=\"editAdmin(" . $row_fasilitas_data['id_fasilitas'] . ", '" . $row_fasilitas_data['judul_fasilitas'] . "', '" . $row_fasilitas_data['isi_fasilitas'] . "', '" . $row_fasilitas_data['icon'] . "', '" . $row_fasilitas_data['color_hover'] . "')\">Edit</button>
-                                                            <a href='proses/delete-admin.php?id=" . $row_fasilitas_data['id_fasilitas'] . "' class='btn btn-danger' style='margin-top:6px' onclick=\"return confirm('Apakah Anda yakin ingin menghapus data ini?');\">Hapus</a>
+                                                            <a href='proses/delete-fasilitas.php?id=" . $row_fasilitas_data['id_fasilitas'] . "' class='btn btn-danger' style='margin-top:6px' onclick=\"return confirm('Apakah Anda yakin ingin menghapus data ini?');\">Hapus</a>
                                                         </td>
                                                     </tr>
                                                 ";
@@ -337,11 +377,23 @@ $result_fasilitas_data = $conn->query($sql_fasilitas_data);
         </div>
     </div>
 
+        <!-- Script untuk Menampilkan Form -->
+    <script>
+        document.getElementById('showFormBtnTambah').addEventListener('click', function() {
+            var form = document.getElementById('fasilitasFormTambah');
+            if (form.style.display === 'none') {
+                form.style.display = 'block';
+            } else {
+                form.style.display = 'none';
+            }
+        });
+    </script>
+    
     <!-- Script untuk Menampilkan Form -->
     <script>
         function editAdmin(id, judul, isi, icon, color) {
             // Menampilkan form
-            document.getElementById('adminForm').style.display = 'block';
+            document.getElementById('fasilitasForm').style.display = 'block';
 
             // Mengisi form dengan data yang dipilih
             document.getElementById('fasilitasId').value = id;
