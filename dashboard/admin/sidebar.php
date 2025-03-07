@@ -72,7 +72,7 @@
 </li>
 <!-- Data Game List -->
 <li class="nav-item">
-    <a class="nav-link" href="tables.html">
+    <a class="nav-link" href="data-gamelist.php">
         <i class="fas fa-fw fa-gamepad"></i>
         <span>Data Game List</span></a>
 </li>
