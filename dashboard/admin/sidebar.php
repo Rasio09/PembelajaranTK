@@ -32,14 +32,14 @@
 
 <!-- Input Game -->
 <li class="nav-item">
-    <a class="nav-link" href="tables.html">
+    <a class="nav-link" href="data-gamelist.php">
         <i class="fas fa-fw fa-gamepad"></i>
         <span>Input Game </span></a>
 </li>
 
 <!-- Input Fasilitas -->
 <li class="nav-item">
-    <a class="nav-link" href="#">
+    <a class="nav-link" href="data-fasilitas.php">
         <i class="fas fa-fw fa-table"></i>
         <span>Input Fasilitas</span></a>
 </li>
